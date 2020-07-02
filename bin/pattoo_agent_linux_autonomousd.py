@@ -14,7 +14,7 @@ import os
 # Try to create a working PYTHONPATH
 _BIN_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 _ROOT_DIRECTORY = os.path.abspath(os.path.join(_BIN_DIRECTORY, os.pardir))
-_EXPECTED = '{0}pattoo-agent-os{0}bin'.format(os.sep)
+_EXPECTED = '{0}pattoo-agent-linux{0}bin'.format(os.sep)
 if _BIN_DIRECTORY.endswith(_EXPECTED) is True:
     sys.path.append(_ROOT_DIRECTORY)
 else:
@@ -26,9 +26,9 @@ else:
 from pattoo_shared import log
 from pattoo_shared.agent import Agent, AgentCLI
 from pattoo_shared.phttp import PostAgent
-from pattoo_agent_os import PATTOO_AGENT_OS_AUTONOMOUSD
-from pattoo_agent_os import collector
-from pattoo_agent_os.configuration import ConfigAutonomousd as Config
+from pattoo_agent_linux import PATTOO_AGENT_LINUX_AUTONOMOUSD
+from pattoo_agent_linux import collector
+from pattoo_agent_linux.configuration import ConfigAutonomousd as Config
 
 
 
@@ -97,7 +97,7 @@ def main():
 
     """
     # Get configuration
-    agent_poller = PollingAgent(PATTOO_AGENT_OS_AUTONOMOUSD)
+    agent_poller = PollingAgent(PATTOO_AGENT_LINUX_AUTONOMOUSD)
 
     # Do control
     cli = AgentCLI()

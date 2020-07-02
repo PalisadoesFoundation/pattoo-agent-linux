@@ -10,7 +10,7 @@ import sys
 DEV_DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(
     os.path.abspath(os.path.join(DEV_DIR, os.pardir)), os.pardir))
-_EXPECTED = '{0}pattoo-agent-os{0}tests{0}bin'.format(os.sep)
+_EXPECTED = '{0}pattoo-agent-linux{0}tests{0}bin'.format(os.sep)
 if DEV_DIR.endswith(_EXPECTED) is True:
     sys.path.insert(0, ROOT_DIR)
 else:
@@ -24,7 +24,7 @@ from pattoo_shared import errors
 
 
 def main():
-    """Get all the error codes used in pattoo-agent-os.
+    """Get all the error codes used in pattoo-agent-linux.
 
     Args:
         None

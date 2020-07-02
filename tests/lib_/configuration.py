@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Class used to create the configuration file used for unittesting.
 
-NOTE!! This script CANNOT import any pattoo-agent-os libraries. Doing so risks
+NOTE!! This script CANNOT import any pattoo-agent-linux libraries. Doing so risks
 libraries trying to access a configuration or configuration directory that
 doesn't yet exist. This is especially important when running cloud based
 automated tests such as 'Travis CI'.
@@ -24,7 +24,7 @@ class UnittestConfig():
     def __init__(self):
         """Initialize the class."""
         # Initialize GLOBAL variables
-        config_suffix = '.pattoo-agent-os-unittests{}config'.format(os.sep)
+        config_suffix = '.pattoo-agent-linux-unittests{}config'.format(os.sep)
         self._config_directory = (
             '{}{}{}'.format(os.environ['HOME'], os.sep, config_suffix))
 
@@ -144,14 +144,14 @@ class UnittestConfig():
                     }
                 ],
             },
-            'pattoo_agent_os_autonomousd': {
+            'pattoo_agent_linux_autonomousd': {
                 'polling_interval': 80
                 },
-            'pattoo_agent_os_spoked': {
+            'pattoo_agent_linux_spoked': {
                 'ip_listen_address': '127.0.0.1',
                 'ip_bind_port': 5000
                 },
-            'pattoo_agent_os_hubd': {
+            'pattoo_agent_linux_hubd': {
                 'polling_interval': 98,
                 'ip_targets': [
                     {'ip_address': '127.0.0.1',

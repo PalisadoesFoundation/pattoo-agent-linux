@@ -16,7 +16,7 @@ python:
 
 # Setup global environmental variables
 env:
-    - PYTHONPATH=./ PATTOO_CONFIGDIR=$HOME/.pattoo-agent-os-unittests/config
+    - PYTHONPATH=./ PATTOO_CONFIGDIR=$HOME/.pattoo-agent-linux-unittests/config
 
 # Install PIP packages and create a temporary config file before installing
 before_install:

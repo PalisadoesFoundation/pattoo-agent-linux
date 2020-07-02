@@ -1,9 +1,9 @@
 main:
 
     log_level: info
-    log_directory: ~/GitHub/pattoo-agent-os/log
+    log_directory: ~/GitHub/pattoo-agent-linux/log
     cache_directory: /mnt/pattoo-ramdisk
-    daemon_directory: ~/GitHub/pattoo-agent-os/daemon
+    daemon_directory: ~/GitHub/pattoo-agent-linux/daemon
     polling_interval: 10
 
 db:
@@ -26,12 +26,12 @@ pattoo-apid:
     api_ip_bind_port: 6060
     api_uses_https: False
 
-pattoo-agent-os-spoked:
+pattoo-agent-linux-spoked:
 
     listen_address: 127.0.0.1
     ip_bind_port: 5000
 
-pattoo-agent-os-hubd:
+pattoo-agent-linux-hubd:
 
     ip_devices:
       - ip_address: 127.0.0.1

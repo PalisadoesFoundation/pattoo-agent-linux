@@ -11,7 +11,8 @@ ROOT_DIR = os.path.abspath(os.path.join(
     os.path.abspath(os.path.join(
         EXEC_DIR, os.pardir)), os.pardir))
 _EXPECTED = (
-    '{0}pattoo-agent-os{0}tests{0}pattoo_agent_os_'.format(os.sep))
+    '{0}pattoo-agent-linux{0}tests{0}pattoo_agent_linux_'.format(os.sep))
+print(EXEC_DIR)
 if EXEC_DIR.endswith(_EXPECTED) is True:
     # We need to prepend the path in case PattooShared has been installed
     # elsewhere on the system using PIP. This could corrupt expected results
@@ -22,7 +23,7 @@ else:
     sys.exit(2)
 
 # Pattoo imports
-from pattoo_agent_os import configuration
+from pattoo_agent_linux import configuration
 from tests.lib_.configuration import UnittestConfig
 
 

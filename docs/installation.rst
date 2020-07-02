@@ -20,22 +20,22 @@ Installation
 Follow these steps.
 
 #. Install ``git`` on your system.
-#. Select and create the parent directory in which you want to install ``pattoo-agent-os``.
+#. Select and create the parent directory in which you want to install ``pattoo-agent-linux``.
 
     .. code-block:: bash
 
        $ mkdir -p /installation/parent/directory
        $ cd /installation/parent/directory
 
-#. Clone the repository to the parent directory using the ``git clone`` command. You can also choose to downloading and unzip the file in the parent directory. The repository can be found at: https://github.com/PalisadoesFoundation/pattoo-agent-os
+#. Clone the repository to the parent directory using the ``git clone`` command. You can also choose to downloading and unzip the file in the parent directory. The repository can be found at: https://github.com/PalisadoesFoundation/pattoo-agent-linux
 
     .. code-block:: bash
 
        $ cd /installation/parent/directory
-       $ git clone https://github.com/PalisadoesFoundation/pattoo-agent-os.git
+       $ git clone https://github.com/PalisadoesFoundation/pattoo-agent-linux.git
 
-#. Enter the ``/installation/parent/directory/pattoo-agent-os`` directory with the ``pattoo-agent-os`` files.
-#. Install the required packages using the ``pip_requirements`` document in the ``pattoo-agent-os`` root directory
+#. Enter the ``/installation/parent/directory/pattoo-agent-linux`` directory with the ``pattoo-agent-linux`` files.
+#. Install the required packages using the ``pip_requirements`` document in the ``pattoo-agent-linux`` root directory
 
    .. code-block:: bash
 
@@ -47,7 +47,7 @@ Follow these steps.
 Configuring systemd Daemons
 ---------------------------
 
-You can also setup all the ``pattoo-agent-os`` agents as system daemons by executing the ``setup/systemd/bin/install_systemd.py`` script.
+You can also setup all the ``pattoo-agent-linux`` agents as system daemons by executing the ``setup/systemd/bin/install_systemd.py`` script.
 
 You have to specify a ``--config_dir`` defining the configuration file directory.
 
@@ -55,13 +55,13 @@ You have to specify a ``--config_dir`` defining the configuration file directory
 
 .. code-block:: bash
 
-   $ sudo setup/systemd/bin/install_systemd.py --config_dir ~/GitHub/pattoo-agent-os/etc
+   $ sudo setup/systemd/bin/install_systemd.py --config_dir ~/GitHub/pattoo-agent-linux/etc
 
    SUCCESS! You are now able to start/stop and enable/disable the following systemd services:
 
-   pattoo_agent_os_spoked.service
+   pattoo_agent_linux_spoked.service
    pattoo_agent_snmpd.service
-   pattoo_agent_os_autonomousd.service
-   pattoo_agent_os_hubd.service
+   pattoo_agent_linux_autonomousd.service
+   pattoo_agent_linux_hubd.service
 
    $

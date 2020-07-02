@@ -8,7 +8,7 @@ Pattoo Agents
 
 ``pattoo`` agents collect IoT data for a centralized ``pattoo`` server.
 
-Visit the `Pattoo Agents GitHub site <https://github.com/PalisadoesFoundation/pattoo-agent-os>`_ to see the code.
+Visit the `Pattoo Agents GitHub site <https://github.com/PalisadoesFoundation/pattoo-agent-linux>`_ to see the code.
 
 Introduction
 ------------
@@ -36,8 +36,8 @@ How to get the daemons running to collect data.
    :caption: Agent Setup:
 
    agent
-   pattoo_agent_os_autonomousd
-   pattoo_agent_os
+   pattoo_agent_linux_autonomousd
+   pattoo_agent_linux
 
 Miscellaneous Information
 -------------------------

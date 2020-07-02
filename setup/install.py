@@ -10,7 +10,7 @@ import traceback
 # Try to create a working PYTHONPATH
 EXEC_DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(EXEC_DIR, os.pardir))
-if EXEC_DIR.endswith('/pattoo-agent-os/setup') is True:
+if EXEC_DIR.endswith('/pattoo-agent-linux/setup') is True:
     sys.path.append(ROOT_DIR)
 else:
     print(
@@ -199,7 +199,7 @@ Other steps:
     1) You can make the various pattoo agents be system daemons by running the
        scripts in the 'setup/systemd' directory. Visit this link for details:
 
-       https://github.com/PalisadoesFoundation/pattoo-agent-os/tree/master/setup/systemd
+       https://github.com/PalisadoesFoundation/pattoo-agent-linux/tree/master/setup/systemd
 
 ''')
     print(message)
@@ -221,7 +221,7 @@ def _log(message):
 
 
 def main():
-    """Install pattoo-agent-os.
+    """Install pattoo-agent-linux.
 
     Args:
         None

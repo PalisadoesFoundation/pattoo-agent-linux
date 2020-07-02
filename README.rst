@@ -1,8 +1,8 @@
 .. image:: docs/_static/pattoo-rtd.png
    :alt: Pattoo Logo
 
-pattoo-agent-os
-=============
+pattoo-agent-linux
+===============
 
 ``pattoo`` agents to collect IoT data for a centralized ``pattoo`` server.
 
@@ -11,7 +11,7 @@ Introduction
 
 ``pattoo`` stores timeseries data in a database and makes it available for users via a GraphQL API.
 
-Data can be collected from a number of sources. The ``pattoo-agent-os`` repository provides a number standard data collection agents for:
+Data can be collected from a number of sources. The ``pattoo-agents`` repository provides a number standard data collection agents for:
 
 * Linux
 * SNMP

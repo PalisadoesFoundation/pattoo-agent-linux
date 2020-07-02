@@ -2,7 +2,7 @@
 Tests
 =====
 
-Welcome to the developer testing section of ``pattoo-agent-os``.
+Welcome to the developer testing section of ``pattoo-agent-linux``.
 
 Running unittests
 -----------------
@@ -12,7 +12,7 @@ You can run all the unittests in this directory by executing the ``bin/_do_all_t
 Duplicate Error Logging Codes
 -----------------------------
 
-``pattoo-agent-os`` tries to make it easy for developers and users to see where there are issues in the code, operating conditions or configuration by generously logging events.
+``pattoo-agent-linux`` tries to make it easy for developers and users to see where there are issues in the code, operating conditions or configuration by generously logging events.
 
 The codes should be unique to make it easier to find the source of an issue.
 

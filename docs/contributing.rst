@@ -6,13 +6,13 @@ Start contributing today!
 Introduction
 ------------
 
-Below is the workflow for having your contribution accepted into the ``pattoo-agent-os`` repository.
+Below is the workflow for having your contribution accepted into the ``pattoo-agent-linux`` repository.
 
 #. Create an Issue or comment on an existing issue to discuss the feature
 #. If the feature is approved, assign the issue to yourself
 #. Fork the project
 #. Clone the fork to your local machine
-#. Add the original project as a remote (git remote add upstream https://github.com/PalisadoesFoundation/pattoo-agent-os, check with: git remote -v)
+#. Add the original project as a remote (git remote add upstream https://github.com/PalisadoesFoundation/pattoo-agent-linux, check with: git remote -v)
 #. Create a topic branch for your change (git checkout -b ``BranchName``\ )
 #. you may create additional branches if modifying multiple parts of the code
 #. Write code and Commit your changes locally. An example of a proper ``git commit`` message can be seen below:

@@ -16,7 +16,7 @@ import os
 # Try to create a working PYTHONPATH
 _BIN_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 _ROOT_DIRECTORY = os.path.abspath(os.path.join(_BIN_DIRECTORY, os.pardir))
-_EXPECTED = '{0}pattoo-agent-os{0}bin'.format(os.sep)
+_EXPECTED = '{0}pattoo-agent-linux{0}bin'.format(os.sep)
 if _BIN_DIRECTORY.endswith(_EXPECTED) is True:
     sys.path.append(_ROOT_DIRECTORY)
 else:
@@ -27,22 +27,22 @@ else:
 # Pattoo libraries
 from pattoo_shared import log
 from pattoo_shared.agent import Agent, AgentAPI, AgentCLI
-from pattoo_agent_os import (
-    PATTOO_AGENT_OS_SPOKED, PATTOO_AGENT_OS_SPOKED_PROXY)
-from pattoo_agent_os import configuration
-from pattoo_agent_os.api import API
+from pattoo_agent_linux import (
+    PATTOO_AGENT_LINUX_SPOKED, PATTOO_AGENT_LINUX_SPOKED_PROXY)
+from pattoo_agent_linux import configuration
+from pattoo_agent_linux.api import API
 
 
 def main():
     """Control the Gunicorn WSGI."""
     # Create Gunicorn object to daemonize
-    agent_api = Agent(PATTOO_AGENT_OS_SPOKED_PROXY)
+    agent_api = Agent(PATTOO_AGENT_LINUX_SPOKED_PROXY)
 
     # Create Flask object to daemonize
     config = configuration.ConfigSpoked()
     agent_gunicorn = AgentAPI(
-        PATTOO_AGENT_OS_SPOKED,
-        PATTOO_AGENT_OS_SPOKED_PROXY,
+        PATTOO_AGENT_LINUX_SPOKED,
+        PATTOO_AGENT_LINUX_SPOKED_PROXY,
         API,
         config=config)
 

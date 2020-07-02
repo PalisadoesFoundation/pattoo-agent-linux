@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Script to test all the pattoo-agent-os unittests.
+"""Script to test all the pattoo-agent-linux unittests.
 
 1)  This script runs each unittest script in the test directory.
 
@@ -22,7 +22,7 @@ import argparse
 DEV_DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(
     os.path.abspath(os.path.join(DEV_DIR, os.pardir)), os.pardir))
-_EXPECTED = '{0}pattoo-agent-os{0}tests{0}bin'.format(os.sep)
+_EXPECTED = '{0}pattoo-agent-linux{0}tests{0}bin'.format(os.sep)
 if DEV_DIR.endswith(_EXPECTED) is True:
     sys.path.insert(0, ROOT_DIR)
 else:
@@ -30,14 +30,14 @@ else:
 '''.format(_EXPECTED))
     sys.exit(2)
 
-# pattoo-agent-os libraries
+# pattoo-agent-linux libraries
 from pattoo_shared import errors
 from pattoo_shared import files
 from tests.lib_.configuration import UnittestConfig
 
 
 def main():
-    """Test all the pattoo-agent-os modules with unittests.
+    """Test all the pattoo-agent-linux modules with unittests.
 
     Args:
         None
@@ -83,11 +83,11 @@ def run_script(cli_string):
     """
     # Initialize key variables
     encoding = locale.getdefaultlocale()[1]
-    pattoo_returncode = ('----- pattoo-agent-os Return Code '
+    pattoo_returncode = ('----- pattoo-agent-linux Return Code '
                          '----------------------------------------')
-    pattoo_stdoutdata = ('----- pattoo-agent-os Test Output '
+    pattoo_stdoutdata = ('----- pattoo-agent-linux Test Output '
                          '----------------------------------------')
-    pattoo_stderrdata = ('----- pattoo-agent-os Test Error '
+    pattoo_stderrdata = ('----- pattoo-agent-linux Test Error '
                          '-----------------------------------------')
 
     # Say what we are doing

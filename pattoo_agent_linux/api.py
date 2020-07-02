@@ -5,10 +5,10 @@
 from flask import Flask, jsonify
 
 # Pattoo imports
-from pattoo_agent_os import collector
+from pattoo_agent_linux import collector
 from pattoo_shared import converter
-from pattoo_agent_os import (
-    PATTOO_AGENT_OS_SPOKED_API_PREFIX, PATTOO_AGENT_OS_SPOKED)
+from pattoo_agent_linux import (
+    PATTOO_AGENT_LINUX_SPOKED_API_PREFIX, PATTOO_AGENT_LINUX_SPOKED)
 
 
 # Define flask parameters
@@ -16,7 +16,7 @@ API = Flask(__name__)
 
 
 @API.route(
-    '{}/<int:polling_interval>'.format(PATTOO_AGENT_OS_SPOKED_API_PREFIX))
+    '{}/<int:polling_interval>'.format(PATTOO_AGENT_LINUX_SPOKED_API_PREFIX))
 def home(polling_interval):
     """Display api data on home page.
 
@@ -28,7 +28,7 @@ def home(polling_interval):
 
     """
     # Process and present
-    agentdata = collector.poll(PATTOO_AGENT_OS_SPOKED, polling_interval)
+    agentdata = collector.poll(PATTOO_AGENT_LINUX_SPOKED, polling_interval)
     pdp = converter.agentdata_to_post(agentdata)
     result = converter.posting_data_points(pdp)
     return jsonify(result)

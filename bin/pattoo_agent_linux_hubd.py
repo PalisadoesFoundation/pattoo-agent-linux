@@ -15,7 +15,7 @@ import multiprocessing
 # Try to create a working PYTHONPATH
 _BIN_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 _ROOT_DIRECTORY = os.path.abspath(os.path.join(_BIN_DIRECTORY, os.pardir))
-_EXPECTED = '{0}pattoo-agent-os{0}bin'.format(os.sep)
+_EXPECTED = '{0}pattoo-agent-linux{0}bin'.format(os.sep)
 if _BIN_DIRECTORY.endswith(_EXPECTED) is True:
     sys.path.append(_ROOT_DIRECTORY)
 else:
@@ -29,9 +29,9 @@ from pattoo_shared.configuration import Config
 from pattoo_shared.agent import Agent, AgentCLI
 from pattoo_shared import files
 from pattoo_shared.phttp import PassiveAgent
-from pattoo_agent_os import (
-    PATTOO_AGENT_OS_HUBD, PATTOO_AGENT_OS_SPOKED_API_PREFIX)
-from pattoo_agent_os import configuration
+from pattoo_agent_linux import (
+    PATTOO_AGENT_LINUX_HUBD, PATTOO_AGENT_LINUX_SPOKED_API_PREFIX)
+from pattoo_agent_linux import configuration
 
 
 class PollingAgent(Agent):
@@ -128,10 +128,10 @@ def _relay(url):
     """
     # Initialize key variables
     config = Config()
-    agent_id = files.get_agent_id(PATTOO_AGENT_OS_HUBD, config)
+    agent_id = files.get_agent_id(PATTOO_AGENT_LINUX_HUBD, config)
 
     # Initialize key variables
-    passive = PassiveAgent(PATTOO_AGENT_OS_HUBD, agent_id, url)
+    passive = PassiveAgent(PATTOO_AGENT_LINUX_HUBD, agent_id, url)
     passive.relay()
 
 
@@ -156,7 +156,7 @@ def _spoked_url(ip_target, ip_bind_port):
 
     # Return
     url = ('http://{}:{}{}/{}'.format(
-        ip_target, ip_bind_port, PATTOO_AGENT_OS_SPOKED_API_PREFIX, _pi))
+        ip_target, ip_bind_port, PATTOO_AGENT_LINUX_SPOKED_API_PREFIX, _pi))
     return url
 
 
@@ -171,7 +171,7 @@ def main():
 
     """
     # Poll
-    agent_poller = PollingAgent(PATTOO_AGENT_OS_HUBD)
+    agent_poller = PollingAgent(PATTOO_AGENT_LINUX_HUBD)
 
     # Do control
     cli = AgentCLI()

@@ -5,8 +5,8 @@
 from pattoo_shared import configuration
 from pattoo_shared.configuration import Config
 from pattoo_shared import files
-from pattoo_agent_os import (
-    PATTOO_AGENT_OS_SPOKED, PATTOO_AGENT_OS_HUBD, PATTOO_AGENT_OS_AUTONOMOUSD)
+from pattoo_agent_linux import (
+    PATTOO_AGENT_LINUX_SPOKED, PATTOO_AGENT_LINUX_HUBD, PATTOO_AGENT_LINUX_AUTONOMOUSD)
 
 
 class ConfigSpoked(Config):
@@ -14,7 +14,7 @@ class ConfigSpoked(Config):
 
     Only processes the following YAML keys in the configuration file:
 
-        The value of the PATTOO_AGENT_OS_SPOKED constant
+        The value of the PATTOO_AGENT_LINUX_SPOKED constant
 
     """
 
@@ -33,7 +33,7 @@ class ConfigSpoked(Config):
 
         # Get the configuration
         config_file = configuration.agent_config_filename(
-            PATTOO_AGENT_OS_SPOKED)
+            PATTOO_AGENT_LINUX_SPOKED)
         self._agent_config = files.read_yaml_file(config_file)
 
     def ip_listen_address(self):
@@ -47,7 +47,7 @@ class ConfigSpoked(Config):
 
         """
         # Get result
-        key = PATTOO_AGENT_OS_SPOKED
+        key = PATTOO_AGENT_LINUX_SPOKED
         sub_key = 'ip_listen_address'
         result = configuration.search(
             key, sub_key, self._agent_config, die=False)
@@ -68,7 +68,7 @@ class ConfigSpoked(Config):
 
         """
         # Get result
-        key = PATTOO_AGENT_OS_SPOKED
+        key = PATTOO_AGENT_LINUX_SPOKED
         sub_key = 'ip_bind_port'
         intermediate = configuration.search(
             key, sub_key, self._agent_config, die=False)
@@ -82,11 +82,11 @@ class ConfigSpoked(Config):
 
 
 class ConfigHubd(Config):
-    """Class for PATTOO_AGENT_OS_HUBD configuration information.
+    """Class for PATTOO_AGENT_LINUX_HUBD configuration information.
 
     Only processes the following YAML keys in the configuration file:
 
-        The value of the PATTOO_AGENT_OS_HUBD constant
+        The value of the PATTOO_AGENT_LINUX_HUBD constant
 
     """
 
@@ -105,7 +105,7 @@ class ConfigHubd(Config):
 
         # Get the configuration
         config_file = configuration.agent_config_filename(
-            PATTOO_AGENT_OS_HUBD)
+            PATTOO_AGENT_LINUX_HUBD)
         self._agent_config = files.read_yaml_file(config_file)
 
     def ip_targets(self):
@@ -119,7 +119,7 @@ class ConfigHubd(Config):
 
         """
         # Get result
-        key = PATTOO_AGENT_OS_HUBD
+        key = PATTOO_AGENT_LINUX_HUBD
         sub_key = 'ip_targets'
         result = configuration.search(
             key, sub_key, self._agent_config, die=True)
@@ -136,7 +136,7 @@ class ConfigHubd(Config):
 
         """
         # Get result
-        key = PATTOO_AGENT_OS_HUBD
+        key = PATTOO_AGENT_LINUX_HUBD
         sub_key = 'polling_interval'
         intermediate = configuration.search(
             key, sub_key, self._agent_config, die=False)
@@ -150,11 +150,11 @@ class ConfigHubd(Config):
 
 
 class ConfigAutonomousd(Config):
-    """Class for PATTOO_AGENT_OS_AUTONOMOUSD configuration information.
+    """Class for PATTOO_AGENT_LINUX_AUTONOMOUSD configuration information.
 
     Only processes the following YAML keys in the configuration file:
 
-        The value of the PATTOO_AGENT_OS_AUTONOMOUSD constant
+        The value of the PATTOO_AGENT_LINUX_AUTONOMOUSD constant
 
     """
 
@@ -173,7 +173,7 @@ class ConfigAutonomousd(Config):
 
         # Get the configuration
         config_file = configuration.agent_config_filename(
-            PATTOO_AGENT_OS_AUTONOMOUSD)
+            PATTOO_AGENT_LINUX_AUTONOMOUSD)
         self._agent_config = files.read_yaml_file(config_file)
 
     def polling_interval(self):
@@ -187,7 +187,7 @@ class ConfigAutonomousd(Config):
 
         """
         # Get result
-        key = PATTOO_AGENT_OS_AUTONOMOUSD
+        key = PATTOO_AGENT_LINUX_AUTONOMOUSD
         sub_key = 'polling_interval'
         intermediate = configuration.search(
             key, sub_key, self._agent_config, die=False)

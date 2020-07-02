@@ -9,7 +9,7 @@ import os
 # Try to create a working PYTHONPATH
 EXEC_DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(EXEC_DIR, os.pardir))
-if EXEC_DIR.endswith('/pattoo-agent-os/setup') is True:
+if EXEC_DIR.endswith('/pattoo-agent-linux/setup') is True:
     sys.path.append(ROOT_DIR)
 else:
     print(

@@ -1,6 +1,6 @@
 
-Pattoo Hub and Spoke Operating System Agents
-============================================
+Pattoo Hub and Spoke Linux Agents
+=================================
 
 The ``pattoo_agent_linux_hubd`` and ``pattoo_agent_linux_spoked`` daemons operate together to report on system performance.
 

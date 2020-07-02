@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Pattoo Agents
-=============
+Pattoo Linux Agents
+===================
 
 ``pattoo`` agents collect IoT data for a centralized ``pattoo`` server.
 
@@ -22,7 +22,7 @@ General information about the project, including the the prerequisite steps to g
    about
    installation
    configuration
-   systemd   
+   systemd
    backup
    cron
 

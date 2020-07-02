@@ -1,6 +1,6 @@
 
-Pattoo Operating System Autonomous Agent
-========================================
+Pattoo Linux Autonomous Agent
+=============================
 
 ``pattoo_agent_linux_autonomousd`` gathers performance data from the operating system on which it is running and reports it to the ``pattoo`` server.
 

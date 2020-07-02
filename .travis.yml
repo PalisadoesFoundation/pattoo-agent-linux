@@ -1,0 +1,28 @@
+# Run on ubuntu
+dist: bionic
+
+# Don't use
+sudo: false
+
+# Define the language and versions that application is written in
+language: python
+python:
+  - 3.6
+
+# Run tests only against the master branch
+# branches:
+#   only:
+#     - master
+
+# Setup global environmental variables
+env:
+    - PYTHONPATH=./ PATTOO_CONFIGDIR=$HOME/.pattoo-agent-linux-unittests/config
+
+# Install PIP packages and create a temporary config file before installing
+before_install:
+    - sudo apt-get -y install python-dev python3-dev
+    - pip install -r pip_requirements.txt
+    - tests/bin/unittest_setup.py
+
+# Run the unittest scripts
+script: tests/bin/do_all_tests.py

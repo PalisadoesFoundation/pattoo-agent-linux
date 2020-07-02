@@ -1,0 +1,86 @@
+main:
+
+    log_level: info
+    log_directory: ~/GitHub/pattoo-agent-linux/log
+    cache_directory: /mnt/pattoo-ramdisk
+    daemon_directory: ~/GitHub/pattoo-agent-linux/daemon
+    polling_interval: 10
+
+db:
+   db_pool_size: 2
+   db_max_overflow: 50
+   db_hostname: localhost
+   db_username: pattoo
+   db_password: n5PaNcV85vR6jmW3
+   db_name: pattoo
+
+pattoo-api-agentd:
+
+    api_ip_address: 127.0.0.1
+    api_ip_bind_port: 6000
+    api_uses_https: False
+
+pattoo-apid:
+
+    api_ip_address: 127.0.0.1
+    api_ip_bind_port: 6060
+    api_uses_https: False
+
+pattoo-agent-linux-spoked:
+
+    listen_address: 127.0.0.1
+    ip_bind_port: 5000
+
+pattoo-agent-linux-hubd:
+
+    ip_devices:
+      - ip_address: 127.0.0.1
+        ip_bind_port: 5000
+
+pattoo-agent-snmpd:
+
+  polling_groups:
+    - group_name: TEST
+      ip_devices:
+        - absw03.sjc01.prod.colovore.net
+        - absw04.sjc01.prod.colovore.net
+      oids:
+        - address: .1.3.6.1.2.1.2.2.1.10
+          multiplier: 8
+        - address: .1.3.6.1.2.1.2.2.1.16
+          multiplier: 8
+
+  auth_groups:
+    - group_name: CISCO
+      snmp_authpassword: Sc@rlet~spaC3
+      snmp_authprotocol: sha
+      snmp_community: null
+      snmp_port: 161
+      snmp_privpassword: paIn~P1ngTCP
+      snmp_privprotocol: aes
+      snmp_secname: neteng
+      snmp_version: 3
+      ip_devices:
+        - absw03.sjc01.prod.colovore.net
+        - absw04.sjc01.prod.colovore.net
+        - absw05.sjc01.prod.colovore.net
+
+pattoo-agent-modbustcpd:
+
+  polling_groups:
+    - group_name: TEST
+      ip_devices:
+        - crv02b.sjc01.faci.colovore.net
+      input_registers:
+        - address: 30386
+        - address: 30388
+
+pattoo-agent-bacnetipd:
+  agent_ip_address: 10.32.6.69
+
+  polling_groups:
+    - group_name: TEST
+      ip_devices:
+        - 10.32.11.50
+      points:
+        - address: 162

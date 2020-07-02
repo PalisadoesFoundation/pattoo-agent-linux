@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Pattoo Agent OS documentation build configuration file, created by
+# Pattoo Agent Linux documentation build configuration file, created by
 # sphinx-quickstart on Tue Oct 22 20:15:19 2019.
 #
 # This file is execfile()d with the current directory set to its
@@ -46,7 +46,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Pattoo Agent OS'
+project = 'Pattoo Agent Linux'
 copyright = '2019, Peter Harrison'
 author = 'Peter Harrison'
 
@@ -113,7 +113,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'PattooAgentOsdoc'
+htmlhelp_basename = 'PattooAgentLinuxdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -140,7 +140,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'PattooAgentOs.tex', 'Pattoo Agent OS Documentation',
+    (master_doc, 'PattooAgentLinux.tex', 'Pattoo Agent Linux Documentation',
      'Peter Harrison', 'manual'),
 ]
 
@@ -150,7 +150,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pattooagentos', 'Pattoo Agent OS Documentation',
+    (master_doc, 'pattooagentlinux', 'Pattoo Agent Linux Documentation',
      [author], 1)
 ]
 
@@ -161,7 +161,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PattooAgentOs', 'Pattoo Agent OS Documentation',
-     author, 'PattooAgentOs', 'One line description of project.',
+    (master_doc, 'PattooAgentLinux', 'Pattoo Agent Linux Documentation',
+     author, 'PattooAgentLinux', 'One line description of project.',
      'Miscellaneous'),
 ]

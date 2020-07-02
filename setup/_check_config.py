@@ -44,12 +44,12 @@ def check():
     config = files.read_yaml_file(config_file)
 
     # Check main keys
-    keys = ['pattoo', 'pattoo_api_agentd', 'pattoo_agent_api']
+    keys = ['pattoo', 'pattoo_agent_api']
     for key in keys:
         if key not in config:
             log_message = ('''\
-Section "{}" not found in configuration file in directory {}. Please fix.\
-'''.format(key, config_directory))
+Section "{}" not found in configuration file {} in directory {}. Please fix.\
+'''.format(key, config_file, config_directory))
             log.log2die_safe(51008, log_message)
 
     # Check secondary keys
@@ -57,8 +57,6 @@ Section "{}" not found in configuration file in directory {}. Please fix.\
         'log_level', 'log_directory', 'cache_directory',
         'daemon_directory']
     secondary_key_check(config, 'pattoo', secondaries)
-    secondaries = ['ip_listen_address', 'ip_bind_port']
-    secondary_key_check(config, 'pattoo_api_agentd', secondaries)
     secondaries = ['ip_address', 'ip_bind_port']
     secondary_key_check(config, 'pattoo_agent_api', secondaries)
 

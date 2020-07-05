@@ -4,4 +4,4 @@ This is the directory with the restructured text documents used in online docume
 
 1. Install the python PIP3 packages  ``sphinx`` and ``sphinxcontrib-fulltoc`` prior to editing these files.
 1. When you have completed your edits, run the ``make html`` command in this directory and check for errors.
-1. View the results in the [Pattoo agents online documentation](https://pattoo-agent-linux.readthedocs.io/).
+1. View the results in the [Pattoo Linux agents online documentation](https://pattoo-agent-linux.readthedocs.io/).

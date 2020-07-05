@@ -11,13 +11,7 @@ Introduction
 
 ``pattoo`` stores timeseries data in a database and makes it available for users via a GraphQL API.
 
-Data can be collected from a number of sources. The ``pattoo-agents`` repository provides a number standard data collection agents for:
-
-* Linux
-* SNMP
-* Modbus TCP
-* BACnet/IP
-* OPC UA
+Data can be collected from a number of sources. The ``pattoo-agent-linux`` repository provides a number standard Linux data collection agents.
 
 ``pattoo`` was originally created to assist DevOps and building facilities management teams to monitor the performance of servers, applications and electro-mechanical systems. It is flexible enough to chart a wide variety of data that changes over time by creating custom agents.
 

@@ -6,7 +6,6 @@ import argparse
 import sys
 import os
 import getpass
-print(sys.path)
 # Set up python path
 EXEC_DIR = os.path.dirname(os.path.realpath(sys.argv[0]))
 ROOT_DIR = os.path.abspath(os.path.join(EXEC_DIR, os.pardir))
@@ -45,11 +44,10 @@ class _Parser(argparse.ArgumentParser):
         """Override the default behavior of the error method.
 
         Will print the help message whenever the error method is triggered.
-        For example, test.py --blah will print the help message too if --blah
-        isn't a valid option
 
         Args:
             None
+
         Returns:
             _args: Namespace() containing all of our CLI arguments as objects
                 - filename: Path to the configuration file
@@ -80,6 +78,7 @@ class Parser():
         Returns:
             _args: Namespace() containing all of our CLI arguments as objects
                 - filename: Path to the configuration file
+
         """
         # Initialize key variables
         width = 80
@@ -213,11 +212,15 @@ class _Install():
 
 def check_user():
     """Validate conditions needed to start installation.
+
     Prevents installation if the script is not run as root
+
     Args:
         None
+
     Returns:
         True: If conditions for installation are satisfied
+
     """
     if getpass.getuser() != 'travis':
         if getpass.getuser() != 'root':
@@ -234,12 +237,11 @@ def main():
 
     Returns:
         None
+
     """
     # Initialize key variables
-    _help = 'This program is the CLI interface to configuring pattoo'
-    template_dir = os.path.join(ROOT_DIR, 'setup/systemd')
-    print(template_dir)
-    print(ROOT_DIR)
+    _help = 'This program is the CLI interface to configuring the linux agent'
+    template_dir = os.path.join(ROOT_DIR, 'setup/systemd/system')
     daemon_list = [
                     'pattoo_agent_linux_autonomousd',
                     'pattoo_agent_linux_spoked',
@@ -256,23 +258,31 @@ def main():
     # Process CLI options
     if args.action == 'install':
 
-        # Installs all pattoo components
+        # Installs all linux agent components
         if args.qualifier == 'all':
             print('Installing everything')
+            configure.install()
+            packages.install(ROOT_DIR)
+            systemd.install(daemon_list=daemon_list,
+                            template_dir=template_dir,
+                            installation_dir=ROOT_DIR)
 
+        # Sets up configuration for linux agent
         elif args.qualifier == 'configuration':
             print('Installing configuration')
             configure.install()
 
+        # Installs necessary pip packages
         elif args.qualifier == 'pip':
             print('Installing pip packages')
             packages.install(ROOT_DIR, args.verbose)
 
+        # Installs and runs system daemons
         elif args.qualifier == 'systemd':
             print('Installing and running system daemons')
-            configure.install()
-            packages.install(ROOT_DIR)
-            systemd.install(daemon_list=daemon_list, template_dir=template_dir)
+            systemd.install(daemon_list=daemon_list,
+                            template_dir=template_dir,
+                            installation_dir=ROOT_DIR)
 
         else:
             parser.print_help(sys.stderr)

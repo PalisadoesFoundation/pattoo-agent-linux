@@ -3,15 +3,6 @@ from pattoo_shared.installation import configure, shared
 from pattoo_shared import files
 
 
-def configure_daemon(daemon_name, config_dir, config_dict):
-    config_file = configure.pattoo_config(
-                                        daemon_name,
-                                        config_dir,
-                                        config_dict)
-
-    configure.check_config(config_file, config_dict)
-
-
 def install(daemon_list):
     """Start configuration process.
 
@@ -58,15 +49,18 @@ def install(daemon_list):
     for daemon in daemon_list:
         # Configure autonomous agent
         if 'autonomousd' in daemon:
-            configure_daemon(daemon, config_dir, autonomousd_agent_dict)
+            configure.configure_component(
+                                    daemon, config_dir, autonomousd_agent_dict)
 
         # Configure spoked agent
         elif 'spoked' in daemon:
-            configure_daemon(daemon, config_dir, spoked_agent_dict)
+            configure.configure_component(
+                                    daemon, config_dir, spoked_agent_dict)
 
         # Convert hubd agents
         elif 'hubd' in daemon:
-            configure_daemon(daemon, config_dir, hubd_agent_dict)
+            configure.configure_component(
+                                    daemon, config_dir, hubd_agent_dict)
 
         else:
             continue

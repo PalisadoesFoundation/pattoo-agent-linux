@@ -261,7 +261,7 @@ def main():
         # Installs all linux agent components
         if args.qualifier == 'all':
             print('Installing everything')
-            configure.install()
+            configure.install(daemon_list)
             packages.install(ROOT_DIR)
             systemd.install(daemon_list=daemon_list,
                             template_dir=template_dir,
@@ -270,7 +270,7 @@ def main():
         # Sets up configuration for linux agent
         elif args.qualifier == 'configuration':
             print('Installing configuration')
-            configure.install()
+            configure.install(daemon_list)
 
         # Installs necessary pip packages
         elif args.qualifier == 'pip':

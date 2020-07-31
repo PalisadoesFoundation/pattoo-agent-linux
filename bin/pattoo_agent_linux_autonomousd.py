@@ -25,7 +25,7 @@ else:
 # Pattoo libraries
 from pattoo_shared import log
 from pattoo_shared.agent import Agent, AgentCLI
-from pattoo_shared.phttp import PostAgent
+from pattoo_shared.phttp import PostAgent, EncryptedPostAgent
 from pattoo_agent_linux import PATTOO_AGENT_LINUX_AUTONOMOUSD
 from pattoo_agent_linux import collector
 from pattoo_agent_linux.configuration import ConfigAutonomousd as Config

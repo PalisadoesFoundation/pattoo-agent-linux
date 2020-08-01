@@ -8,7 +8,7 @@ from pattoo_shared.configuration import Config
 from pattoo_shared import files
 from pattoo_agent_linux import (
     PATTOO_AGENT_LINUX_SPOKED,
-    PATTOO_AGENT_LINUX_HUBD, 
+    PATTOO_AGENT_LINUX_HUBD,
     PATTOO_AGENT_LINUX_AUTONOMOUSD)
 
 

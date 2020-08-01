@@ -38,24 +38,15 @@ You can automatically set this variable each time you log in by adding these lin
 Make sure that files in this directory are readable by the user that will be running standard ``pattoo`` agent daemons or scripts.
 
 
-Configuring the Hub Daemon
---------------------------
+Configuring the Spoked Daemon
+-----------------------------
 
 The ``pattoo_agent_linux_spoked`` is configured using the ``pattoo_agent_linux_spoked.yaml`` file. Let's see how it is done.
 
-
-pattoo_agent_linux_spoked Section
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Here is a sample of what should be added. An explanation follows.
-
-**NOTE:** The indentations in the YAML configuration are important. Make sure indentations line up. Dashes '-' indicate one item in a list of items.
-
 .. code-block:: yaml
 
-   pattoo_agent_linux_spoked:
-       ip_listen_address: 0.0.0.0
-       ip_bind_port: 5000
+     ip_listen_address: 0.0.0.0
+     ip_bind_port: 5000
 
 Configuration Explanation
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,21 +56,15 @@ This table outlines the purpose of each configuration parameter
 .. list-table::
    :header-rows: 1
 
-   * - Section
-     - Config Options
+   * - Config Option
      - Description
-   * - ``pattoo_agent_linux_spoked``
-     -
-     - **Note:** Only required for devices running ``pattoo_agent_linux_spoked``
-   * -
-     - ``ip_listen_address``
+   * - ``ip_listen_address``
      - IP address on which the API server will listen. Setting this to ``0.0.0.0`` will make it listen on all IPv4 addresses. Setting to ``"0::"`` will make it listen on all IPv6 configured interfaces. It will not listen on IPv4 and IPv6 addresses simultaneously. You must **quote** all IPv6 addresses. The default value is ``0.0.0.0``
-   * -
-     - ``ip_bind_port``
+   * - ``ip_bind_port``
      - TCP port on which the API will listen
 
-Operating the Spoke Daemon
-------------------------------
+Operating the Spoked Daemon
+---------------------------
 
 The ``pattoo_agent_linux_spoked`` creates a web page on the device it runs to report on the device's operating status.
 
@@ -149,21 +134,15 @@ Configuring the ``Hub`` Daemon
 
 The ``pattoo_agent_linux_hubd`` is configured using the ``pattoo_agent_linux_hubd.yaml`` file. Let's see how it is done.
 
-pattoo_agent_linux_hubd Section
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Here is a sample of what should be added. An explanation follows.
-
 **NOTE:** The indentations in the YAML configuration are important. Make sure indentations line up. Dashes '-' indicate one item in a list of items.
 
 .. code-block:: yaml
 
-   pattoo_agent_linux_hubd:
-       ip_devices:
-         - ip_address: 127.0.0.1
-           ip_bind_port: 5000
-         - ip_address: 127.0.0.2
-           ip_bind_port: 5000
+     ip_devices:
+       - ip_address: 127.0.0.1
+         ip_bind_port: 5000
+       - ip_address: 127.0.0.2
+         ip_bind_port: 5000
 
 Configuration Explanation
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -175,22 +154,14 @@ This table outlines the purpose of each configuration parameter
 
   * - Section
     - Sub-Section
-    - Config Options
     - Description
-  * - ``pattoo_agent_linux_hubd``
+  * - ``ip_devices``
     -
-    -
-    - **Note:** Only required for devices running ``pattoo_agent_linux_hubd``
+    - Section providing a list of IP addresses or hostnames running ``pattoo_agent_linux_spoked`` that need to be polled for data. You must specify an ``ip_address`` and TCP ``ip_bind_port``\ for each of these devices.
   * -
-    - ``ip_devices``
-    -
-    - Sub-Section providing a list of IP addresses or hostnames running ``pattoo_agent_linux_spoked`` that need to be polled for data. You must specify an ``ip_address`` and TCP ``ip_bind_port``\ for each of these devices.
-  * -
-    -
     - ``ip_address``
     - The IP adrress of the remote ``ip_device``.
   * -
-    -
     - ``bind_port``
     - The TCP port on which the remote ``ip_device`` is listening.
 

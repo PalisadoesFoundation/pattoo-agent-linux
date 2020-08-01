@@ -44,20 +44,13 @@ Make sure that files in this directory are readable by the user that will be run
 Configuring ``pattoo_agent_linux_autonomousd.yaml``
 ---------------------------------------------------
 
-Let's get started on configuring ``pattoo_agent_linux_autonomousd.yaml``.
-
-``pattoo_agent_linux_autonomousd`` Section
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Here is a sample of what should be added. An explanation follows.
+Let's get started on configuring ``pattoo_agent_linux_autonomousd.yaml``. Here is a sample of what should be added. An explanation follows.
 
 **NOTE:** The indentations in the YAML configuration are important. Make sure indentations line up. Dashes '-' indicate one item in a list of items.
 
 .. code-block:: yaml
 
-    pattoo_agent_linux_autonomousd:
-
-        polling_interval: 300
+      polling_interval: 300
 
 Configuration Explanation
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,16 +61,8 @@ This table outlines the purpose of each configuration parameter
    :header-rows: 1
 
    * - Section
-     - Sub-Section
-     - Config Options
      - Description
-   * - ``pattoo_agent_linux_autonomousd``
-     -
-     -
-     -
-   * -
-     - ``polling_interval``
-     -
+   * - ``polling_interval``
      - The ``pattoo_agent_linux_autonomousd`` will report to the ``pattoo`` server every ``polling_interval`` seconds
 
 

@@ -5,15 +5,14 @@ import textwrap
 import argparse
 import sys
 import os
+import pwd
 import getpass
 # Set up python path
 EXEC_DIR = os.path.dirname(os.path.realpath(sys.argv[0]))
 ROOT_DIR = os.path.abspath(os.path.join(EXEC_DIR, os.pardir))
 _EXPECTED = '{0}pattoo-agent-linux{0}setup'.format(os.sep)
-DAEMON_DIRECTORY = '/opt/pattoo-daemon/.python'
 if EXEC_DIR.endswith(_EXPECTED) is True:
     sys.path.append(ROOT_DIR)
-    sys.path.append(DAEMON_DIRECTORY)
     # Set pattoo config dir if it had not been set already
     try:
         os.environ['PATTOO_CONFIGDIR']
@@ -25,15 +24,20 @@ This script is not installed in the "{}" directory. Please fix.\
 '''.format(_EXPECTED))
     sys.exit(2)
 
+# Importing shared to install pattoo_shared if its not installed
+from _pattoo_agent_linux import shared
+
 # Attempt to import pattoo shared
+default_path = '''\
+{}/.local/lib/python3.6/site-packages'''.format(os.path.expanduser('~'))
+
 try:
     import pattoo_shared
 except ModuleNotFoundError:
-    print('Pattoo shared is missing, please run\
-"python3 -m pip install PattooShared" to continue')
+    shared.run_script('pip3 install PattooShared -t {0}'.format(default_path))
 
 # Import pattoo related libraries
-from pattoo_shared.installation import packages, shared, systemd
+from pattoo_shared.installation import packages, systemd, environment
 from _pattoo_agent_linux import configure
 
 
@@ -210,10 +214,11 @@ class _Install():
         )
 
 
-def check_user():
+def installation_checks():
     """Validate conditions needed to start installation.
 
-    Prevents installation if the script is not run as root
+    Prevents installation if the script is not run as root and prevents
+    installation if script is run in a home related directory
 
     Args:
         None
@@ -222,11 +227,48 @@ def check_user():
         True: If conditions for installation are satisfied
 
     """
+    # Check user
     if getpass.getuser() != 'travis':
         if getpass.getuser() != 'root':
             shared.log('You are currently not running the script as root.\
 Run as root to continue')
-    return True
+        # Check installation directory
+        if os.getcwd().startswith('/home'):
+            shared.log('''\
+You cloned the repository in a home related directory, please clone in a\
+ non-home directory to continue''')
+
+        # Check if virtualenv is installed
+        try:
+            import virtualenv
+        except ModuleNotFoundError:
+            print('virtualenv is not installed. Installing virtualenv')
+            shared.run_script('''\
+pip3 install virtualenv -t {}'''.format(default_path))
+
+
+def get_pattoo_home():
+    """Retrieve home directory for pattoo user.
+
+    Args:
+        None
+
+    Returns:
+        The home directory for the pattoo user
+
+    """
+    try:
+        # No exception will be thrown if the pattoo user exists
+        pattoo_home = pwd.getpwnam('pattoo').pw_dir
+    # Set defaults if pattoo user doesn't exist
+    except KeyError:
+        pattoo_home = '/home/pattoo'
+
+    # Ensure that the pattoo home directory is not set to non-existent
+    if pattoo_home == '/nonexistent':
+        pattoo_home = '/home/pattoo'
+
+    return pattoo_home
 
 
 def main():
@@ -248,8 +290,21 @@ def main():
                     'pattoo_agent_linux_hubd'
                 ]
 
-    # Ensure user is running as root or travis
-    check_user()
+    # Ensure appropriate conditions are set for the installation
+    installation_checks() 
+
+    # Setup virtual environment
+    if getpass.getuser() != 'travis':
+        pattoo_home = get_pattoo_home()
+        venv_dir = os.path.join(pattoo_home, 'pattoo-venv')
+        environment.environment_setup(venv_dir)
+        venv_interpreter = os.path.join(venv_dir, 'bin/python3')
+        installation_dir = '{} {}'.format(venv_interpreter, ROOT_DIR)
+    else:
+        # Set default directories for travis
+        pattoo_home = os.path.join(os.path.expanduser('~'), 'pattoo')
+        venv_dir = default_path
+        installation_dir = ROOT_DIR
 
     # Process the CLI
     _parser = Parser(additional_help=_help)
@@ -261,28 +316,28 @@ def main():
         # Installs all linux agent components
         if args.qualifier == 'all':
             print('Installing everything')
-            configure.install(daemon_list)
-            packages.install(ROOT_DIR)
+            configure.install(daemon_list, pattoo_home)
+            packages.install(ROOT_DIR, venv_dir, args.verbose)
             systemd.install(daemon_list=daemon_list,
                             template_dir=template_dir,
-                            installation_dir=ROOT_DIR)
+                            installation_dir=installation_dir)
 
         # Sets up configuration for linux agent
         elif args.qualifier == 'configuration':
             print('Installing configuration')
-            configure.install(daemon_list)
+            configure.install(daemon_list, pattoo_home)
 
         # Installs necessary pip packages
         elif args.qualifier == 'pip':
             print('Installing pip packages')
-            packages.install(ROOT_DIR, args.verbose)
+            packages.install(ROOT_DIR, venv_dir, args.verbose)
 
         # Installs and runs system daemons
         elif args.qualifier == 'systemd':
             print('Installing and running system daemons')
             systemd.install(daemon_list=daemon_list,
                             template_dir=template_dir,
-                            installation_dir=ROOT_DIR)
+                            installation_dir=installation_dir)
 
         else:
             parser.print_help(sys.stderr)

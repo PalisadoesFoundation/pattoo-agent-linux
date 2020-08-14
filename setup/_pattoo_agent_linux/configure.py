@@ -1,9 +1,11 @@
+"""Install pattoo configuration."""
 import os
 from pattoo_shared.installation import configure, shared
 from pattoo_shared import files
+import getpass
 
 
-def install(daemon_list):
+def install(daemon_list, pattoo_home):
     """Start configuration process.
 
     Args:
@@ -42,8 +44,13 @@ def install(daemon_list):
     # Create the pattoo user and group
     configure.create_user('pattoo', '/nonexistent', ' /bin/false', True)
 
-    # Attempt to change the ownership of the configuration directory
-    shared.chown(config_dir)
+    if getpass.getuser() != 'travis':
+        # Create the pattoo user and group
+        configure.create_user('pattoo', pattoo_home, '/bin/false', True)
+
+        # Attempt to change the ownership of the config and home directories
+        shared.chown(config_dir)
+        shared.chown(pattoo_home)
 
     # Configure daemons in list regardless of order
     for daemon in daemon_list:

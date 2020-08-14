@@ -24,7 +24,7 @@ else:
 
 # Pattoo imports
 from pattoo_agent_linux import configuration
-from tests.lib_.configuration import UnittestConfig
+from tests.lib_.configuration import UnittestConfig, WebConfig
 
 
 class TestConfigSpoked(unittest.TestCase):
@@ -34,6 +34,7 @@ class TestConfigSpoked(unittest.TestCase):
     # Initialize variable class
     ##########################################################################
     config = configuration.ConfigSpoked()
+    web_config = WebConfig()
 
     def test___init__(self):
         """Testing function __init__."""
@@ -106,19 +107,19 @@ class TestConfigSpoked(unittest.TestCase):
     def test_web_api_ip_address(self):
         """Testing method / function web_api_ip_address."""
         # Test
-        result = self.config.web_api_ip_address()
+        result = self.web_config.web_api_ip_address()
         self.assertEqual(result, '127.0.0.12')
 
     def test_web_api_ip_bind_port(self):
         """Testing method / function web_api_ip_bind_port."""
         # Test
-        result = self.config.web_api_ip_bind_port()
+        result = self.web_config.web_api_ip_bind_port()
         self.assertEqual(result, 50002)
 
     def test_web_api_server_url(self):
         """Testing method / function web_api_server_url."""
         # Test
-        result = self.config.web_api_server_url()
+        result = self.web_config.web_api_server_url()
         self.assertEqual(
             result, 'http://127.0.0.12:50002/pattoo/api/v1/web/graphql')
 
@@ -195,6 +196,7 @@ class TestConfigHubd(unittest.TestCase):
     # Initialize variable class.
     ##########################################################################
     config = configuration.ConfigHubd()
+    web_config = WebConfig()
 
     def test___init__(self):
         """Testing function __init__."""
@@ -272,19 +274,19 @@ class TestConfigHubd(unittest.TestCase):
     def test_web_api_ip_address(self):
         """Testing method / function web_api_ip_address."""
         # Test
-        result = self.config.web_api_ip_address()
+        result = self.web_config.web_api_ip_address()
         self.assertEqual(result, '127.0.0.12')
 
     def test_web_api_ip_bind_port(self):
         """Testing method / function web_api_ip_bind_port."""
         # Test
-        result = self.config.web_api_ip_bind_port()
+        result = self.web_config.web_api_ip_bind_port()
         self.assertEqual(result, 50002)
 
     def test_web_api_server_url(self):
         """Testing method / function web_api_server_url."""
         # Test
-        result = self.config.web_api_server_url()
+        result = self.web_config.web_api_server_url()
         self.assertEqual(
             result, 'http://127.0.0.12:50002/pattoo/api/v1/web/graphql')
 
@@ -361,6 +363,7 @@ class TestConfigAutonomousd(unittest.TestCase):
     # Initialize variable class.
     ##########################################################################
     config = configuration.ConfigAutonomousd()
+    web_config = WebConfig()
 
     def test___init__(self):
         """Testing function __init__."""
@@ -424,19 +427,19 @@ class TestConfigAutonomousd(unittest.TestCase):
     def test_web_api_ip_address(self):
         """Testing method / function web_api_ip_address."""
         # Test
-        result = self.config.web_api_ip_address()
+        result = self.web_config.web_api_ip_address()
         self.assertEqual(result, '127.0.0.12')
 
     def test_web_api_ip_bind_port(self):
         """Testing method / function web_api_ip_bind_port."""
         # Test
-        result = self.config.web_api_ip_bind_port()
+        result = self.web_config.web_api_ip_bind_port()
         self.assertEqual(result, 50002)
 
     def test_web_api_server_url(self):
         """Testing method / function web_api_server_url."""
         # Test
-        result = self.config.web_api_server_url()
+        result = self.web_config.web_api_server_url()
         self.assertEqual(
             result, 'http://127.0.0.12:50002/pattoo/api/v1/web/graphql')
 

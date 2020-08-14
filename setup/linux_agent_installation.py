@@ -28,17 +28,8 @@ This script is not installed in the "{}" directory. Please fix.\
 from _pattoo_agent_linux import shared
 
 # Attempt to import pattoo shared
-default_path = '''\
-{}/.local/lib/python3.6/site-packages'''.format(os.path.expanduser('~'))
-
-try:
-    import pattoo_shared
-except ModuleNotFoundError:
-    shared.run_script('pip3 install PattooShared -t {0}'.format(default_path))
-
-# Import pattoo related libraries
-from pattoo_shared.installation import packages, systemd, environment
-from _pattoo_agent_linux import configure
+DEFAULT_PATH = '''\
+{}/.local/lib/pattoo/site-packages'''.format(os.path.expanduser('~'))
 
 
 class _Parser(argparse.ArgumentParser):
@@ -214,6 +205,40 @@ class _Install():
         )
 
 
+def venv_check():
+    """Check if "virtualenv" is installed.
+    If virtualenv is not installed it gets automatically installed to the
+    user's default python path
+    Args:
+        None
+    Returns:
+        None
+    """
+    # Check if virtualenv is installed
+    try:
+        import virtualenv
+    except ModuleNotFoundError:
+        print('virtualenv is not installed, installing the latest version')
+        shared.run_script('pip3 install virtualenv')
+
+
+def pattoo_shared_check():
+    """Check if pattoo shared is installed.
+    If pattoo shared is not installed, it gets installed to the user's
+    default python path
+    Args:
+        None
+    Returns:
+        None
+    """
+    # Try except to install pattoo shared
+    try:
+        import pattoo_shared
+    except ModuleNotFoundError:
+        print('PattooShared is missing, installing the latest version')
+        shared.run_script('pip3 install PattooShared')
+
+
 def installation_checks():
     """Validate conditions needed to start installation.
 
@@ -237,14 +262,6 @@ Run as root to continue')
             shared.log('''\
 You cloned the repository in a home related directory, please clone in a\
  non-home directory to continue''')
-
-        # Check if virtualenv is installed
-        try:
-            import virtualenv
-        except ModuleNotFoundError:
-            print('virtualenv is not installed. Installing virtualenv')
-            shared.run_script('''\
-pip3 install virtualenv -t {}'''.format(default_path))
 
 
 def get_pattoo_home():
@@ -290,28 +307,31 @@ def main():
                     'pattoo_agent_linux_hubd'
                 ]
 
-    # Ensure appropriate conditions are set for the installation
-    installation_checks() 
-
-    # Setup virtual environment
-    if getpass.getuser() != 'travis':
-        pattoo_home = get_pattoo_home()
-        venv_dir = os.path.join(pattoo_home, 'pattoo-venv')
-        environment.environment_setup(venv_dir)
-        venv_interpreter = os.path.join(venv_dir, 'bin/python3')
-        installation_dir = '{} {}'.format(venv_interpreter, ROOT_DIR)
-    else:
-        # Set default directories for travis
-        pattoo_home = os.path.join(os.path.expanduser('~'), 'pattoo')
-        venv_dir = default_path
-        installation_dir = ROOT_DIR
-
     # Process the CLI
     _parser = Parser(additional_help=_help)
     (args, parser) = _parser.args()
 
     # Process CLI options
     if args.action == 'install':
+        pattoo_shared_check()
+        venv_check()
+
+        # Import pattoo_shared related libraries
+        from pattoo_shared.installation import packages, systemd, environment
+        from _pattoo_agent_linux import configure
+
+        # Setup virtual environment
+        if getpass.getuser() != 'travis':
+            pattoo_home = get_pattoo_home()
+            venv_dir = os.path.join(pattoo_home, 'pattoo-venv')
+            environment.environment_setup(venv_dir)
+            venv_interpreter = os.path.join(venv_dir, 'bin/python3')
+            installation_dir = '{} {}'.format(venv_interpreter, ROOT_DIR)
+        else:
+            # Set default directories for travis
+            pattoo_home = os.path.join(os.path.expanduser('~'), 'pattoo')
+            venv_dir = DEFAULT_PATH
+            installation_dir = ROOT_DIR
 
         # Installs all linux agent components
         if args.qualifier == 'all':
@@ -348,4 +368,7 @@ def main():
 
 
 if __name__ == '__main__':
+    # Ensure appropriate conditions are set for the installation
+    installation_checks() 
+
     main()

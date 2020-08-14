@@ -257,8 +257,13 @@ class Performance():
                     '{}_opts'.format('disk_partition'),
                     item.opts))
 
-                # Get the partition data
-                partition = psutil.disk_usage(mountpoint)._asdict()
+                # Get the partition data. Skip if the data is unreadable
+                # due to permissions (eg. External storage mounted by users)
+                try:
+                    partition = psutil.disk_usage(mountpoint)._asdict()
+                except:
+                    continue
+
                 for key, value in partition.items():
                     _dv = DataPoint(
                         '{}_disk_usage_{}'.format(
@@ -285,7 +290,8 @@ class Performance():
         regex = re.compile(r'^ram\d+$')
         result = []
 
-        # Get disk I/O usage
+        # Get disk I/O usage. Skip if the data is unreadable
+        # due to permissions (eg. External storage mounted by users)
         ioddv = psutil.disk_io_counters(perdisk=True)
 
         # "source" is disk name

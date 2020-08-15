@@ -3,7 +3,7 @@
 #############################################
 
 # Pattoo packages
-PattooShared==0.0.91
+PattooShared==0.0.93
 
 # Miscellaneous packages
 Flask
@@ -11,3 +11,6 @@ PyYAML
 
 # Linux
 psutil>=5.7.0
+
+# Encryption packages
+python-gnupg==0.4.6

@@ -31,7 +31,6 @@ from pattoo_agent_linux import collector
 from pattoo_agent_linux.configuration import ConfigAutonomousd as Config
 
 
-
 class PollingAgent(Agent):
     """Agent that gathers data."""
 

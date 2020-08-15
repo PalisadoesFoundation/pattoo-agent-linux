@@ -3,10 +3,13 @@
 
 # Import project libraries
 from pattoo_shared import configuration
+from pattoo_shared import log
 from pattoo_shared.configuration import Config
 from pattoo_shared import files
 from pattoo_agent_linux import (
-    PATTOO_AGENT_LINUX_SPOKED, PATTOO_AGENT_LINUX_HUBD, PATTOO_AGENT_LINUX_AUTONOMOUSD)
+    PATTOO_AGENT_LINUX_SPOKED,
+    PATTOO_AGENT_LINUX_HUBD,
+    PATTOO_AGENT_LINUX_AUTONOMOUSD)
 
 
 class ConfigSpoked(Config):
@@ -47,14 +50,8 @@ class ConfigSpoked(Config):
 
         """
         # Get result
-        key = PATTOO_AGENT_LINUX_SPOKED
-        sub_key = 'ip_listen_address'
-        result = configuration.search(
-            key, sub_key, self._agent_config, die=False)
-
-        # Default to 0.0.0.0
-        if result is None:
-            result = '0.0.0.0'
+        key = 'ip_listen_address'
+        result = self._agent_config.get(key, '0.0.0.0')
         return result
 
     def ip_bind_port(self):
@@ -68,16 +65,9 @@ class ConfigSpoked(Config):
 
         """
         # Get result
-        key = PATTOO_AGENT_LINUX_SPOKED
-        sub_key = 'ip_bind_port'
-        intermediate = configuration.search(
-            key, sub_key, self._agent_config, die=False)
-
-        # Default to 6000
-        if intermediate is None:
-            result = 5000
-        else:
-            result = int(intermediate)
+        key = 'ip_bind_port'
+        result = self._agent_config.get(key, 5000)
+        result = int(result)
         return result
 
 
@@ -119,10 +109,11 @@ class ConfigHubd(Config):
 
         """
         # Get result
-        key = PATTOO_AGENT_LINUX_HUBD
-        sub_key = 'ip_targets'
-        result = configuration.search(
-            key, sub_key, self._agent_config, die=True)
+        key = 'ip_targets'
+        result = self._agent_config.get(key, None)
+        if result is None:
+            log_message = '"{}" not found in configuration file'.format(key)
+            log.log2die(50001, log_message)
         return result
 
     def polling_interval(self):
@@ -136,16 +127,9 @@ class ConfigHubd(Config):
 
         """
         # Get result
-        key = PATTOO_AGENT_LINUX_HUBD
-        sub_key = 'polling_interval'
-        intermediate = configuration.search(
-            key, sub_key, self._agent_config, die=False)
-
-        # Default to 300
-        if bool(intermediate) is False:
-            result = 300
-        else:
-            result = abs(int(intermediate))
+        key = 'polling_interval'
+        result = self._agent_config.get(key, 300)
+        result = abs(int(result))
         return result
 
 
@@ -187,14 +171,7 @@ class ConfigAutonomousd(Config):
 
         """
         # Get result
-        key = PATTOO_AGENT_LINUX_AUTONOMOUSD
-        sub_key = 'polling_interval'
-        intermediate = configuration.search(
-            key, sub_key, self._agent_config, die=False)
-
-        # Default to 300
-        if bool(intermediate) is False:
-            result = 300
-        else:
-            result = abs(int(intermediate))
+        key = 'polling_interval'
+        result = self._agent_config.get(key, 300)
+        result = abs(int(result))
         return result

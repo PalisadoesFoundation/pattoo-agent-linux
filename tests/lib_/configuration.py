@@ -16,6 +16,84 @@ import yaml
 
 # Pattoo imports
 from pattoo_shared import log
+from pattoo_shared.configuration import BaseConfig, _config_reader, search
+from pattoo_shared.constants import PATTOO_API_WEB_PREFIX
+from pattoo_shared import url
+
+
+class WebConfig(BaseConfig):
+    """Class gathers all configuration information relating to pattoo web.
+    The configuration values for this class will be written to pattoo_webd.yaml
+    """
+
+    def __init__(self):
+        """Initialize the class.
+        Args:
+            None
+        Returns:
+            None
+        """
+        # Get the configuration
+        BaseConfig.__init__(self)
+        self._base_yaml_configuration = _config_reader('pattoo.yaml')
+
+    def web_api_ip_address(self):
+        """Get web_api_ip_address.
+        Args:
+            None
+        Returns:
+            result: result
+        """
+        # Initialize key variables
+        key = 'pattoo_web_api'
+        sub_key = 'ip_address'
+
+        # Get result
+        result = search(
+            key, sub_key, self._base_yaml_configuration, die=True)
+        return result
+
+    def web_api_ip_bind_port(self):
+        """Get web_api_ip_bind_port.
+        Args:
+            None
+        Returns:
+            result: result
+        """
+        # Initialize key variables
+        key = 'pattoo_web_api'
+        sub_key = 'ip_bind_port'
+
+        # Get result
+        intermediate = search(
+            key, sub_key, self._base_yaml_configuration, die=False)
+        if intermediate is None:
+            result = 20202
+        else:
+            result = int(intermediate)
+        return result
+
+    def web_api_server_url(self, graphql=True):
+        """Get pattoo server's remote URL.
+        Args:
+            agent_id: Agent ID
+        Returns:
+            result: URL.
+        """
+        # Create the suffix
+        if bool(graphql) is True:
+            suffix = '/graphql'
+        else:
+            suffix = '/rest/data'
+
+        # Return
+        _ip = url.url_ip_address(self.web_api_ip_address())
+        result = (
+            'http://{}:{}{}{}'.format(
+                _ip,
+                self.web_api_ip_bind_port(),
+                PATTOO_API_WEB_PREFIX, suffix))
+        return result
 
 
 class UnittestConfig():
@@ -58,92 +136,6 @@ class UnittestConfig():
                     'ip_bind_port': 50002,
                 }
             },
-            'pattoo_agent_bacnetipd': {
-                'polling_interval': 893,
-                'agent_ip_address': '127.0.0.50',
-                'polling_groups': [
-                    {
-                        'group_name': 'TEST',
-                        'ip_targets': ['127.0.0.60'],
-                        'points': [
-                            {'address': 123},
-                            {'address': 345}
-                        ]
-                    }
-                ],
-            },
-            'pattoo_agent_snmp_ifmibd': {
-                'polling_interval': 7846,
-                'polling_groups': [
-                    {
-                        'group_name': 'TEST',
-                        'ip_targets': ['localhost'],
-                        'oids': [
-                            {'address': '.1.3.6.1.2.1.2.2.1.14',
-                             'multiplier': 8},
-                            {'address': '.1.3.6.1.2.1.2.2.1.20',
-                             'multiplier': 8}]
-                    }
-                ],
-                'auth_groups': [
-                    {
-                        'group_name': 'TEST',
-                        'snmp_authpassword': '092df34',
-                        'snmp_authprotocol': 'MD5',
-                        'snmp_community': '049s832',
-                        'snmp_port': 161,
-                        'snmp_privpassword': '987dee1234',
-                        'snmp_privprotocol': 'DES',
-                        'snmp_secname': '0981s23df',
-                        'snmp_version': 3,
-                        'ip_targets': ['localhost']
-                    }
-                ]
-            },
-            'pattoo_agent_snmpd': {
-                'polling_interval': 912,
-                'polling_groups': [
-                    {
-                        'group_name': 'TEST',
-                        'ip_targets': ['localhost'],
-                        'oids': [
-                            {'address': '.1.3.6.1.2.1.2.2.1.10',
-                             'multiplier': 8},
-                            {'address': '.1.3.6.1.2.1.2.2.1.16',
-                             'multiplier': 8}]
-                    }
-                ],
-                'auth_groups': [
-                    {
-                        'group_name': 'TEST',
-                        'snmp_authpassword': None,
-                        'snmp_authprotocol': None,
-                        'snmp_community': '8gfljtrwer',
-                        'snmp_port': 161,
-                        'snmp_privpassword': None,
-                        'snmp_privprotocol': None,
-                        'snmp_secname': None,
-                        'snmp_version': 2,
-                        'ip_targets': ['localhost']
-                    }
-                ]
-            },
-            'pattoo_agent_modbustcpd': {
-                'polling_interval': 457,
-                'polling_groups': [
-                    {
-                        'group_name': 'TEST',
-                        'ip_targets': ['unittest.modbus.tcp.target.net'],
-                        'unit': 3,
-                        'input_registers': [
-                            {'address': 30388, 'multiplier': 7},
-                            {'address': 30389, 'multiplier': 7}],
-                        'holding_registers': [
-                            {'address': 40124, 'multiplier': 9},
-                            {'address': 40457, 'multiplier': 9}]
-                    }
-                ],
-            },
             'pattoo_agent_linux_autonomousd': {
                 'polling_interval': 80
                 },
@@ -157,20 +149,16 @@ class UnittestConfig():
                     {'ip_address': '127.0.0.1',
                      'ip_bind_port': 5000}]
                 },
-            'pattoo_agent_opcuad': {
-                'polling_interval': 102,
-                'polling_groups': [
-                    {
-                        'group_name': 'TEST OPCUA',
-                        'ip_target': 'unittest.opcua.tcp.target.net',
-                        'ip_port': 7844,
-                        'username': 'nTbJazc6q3MaMazT',
-                        'password': 'eQ6KnJcCk3qLkB73',
-                        'nodes': [
-                            {'address': 1, 'multiplier': 2},
-                            {'address': 3, 'multiplier': 4}]
-                    }
-                ]
+        }
+
+        self._agent_config = {
+            'pattoo_agent_api': {
+                'ip_address': '127.0.0.11',
+                'ip_bind_port': 50001,
+            },
+
+            'encryption': {
+                'agent_email': 'test_agent@example.org'
             }
         }
 
@@ -184,17 +172,25 @@ class UnittestConfig():
             self.config_directory: Directory where the config is placed
 
         """
+        # Initialize key variables
+        agent_config = '{}{}pattoo_agent.yaml'.format(
+                                            self._config_directory, os.sep)
         # Write good_config to file
-        for key, value in sorted(self._config.items()):
+        for key, config_ in sorted(self._config.items()):
             config_file = (
                 '{}{}{}.yaml'.format(self._config_directory, os.sep, key))
-            if key != 'pattoo':
-                _data = {key: value}
-            else:
-                _data = value
             with open(config_file, 'w') as f_handle:
-                yaml.dump(_data, f_handle, default_flow_style=False)
+                yaml.dump(config_, f_handle, default_flow_style=False)
 
+        # Write to pattoo_agent.yaml
+        try:
+            f_handle = open(agent_config, 'w')
+        except PermissionError:
+            log.log2die(50500, '''\
+Insufficient permissions for creating the file:{}'''.format(f_handle))
+        else:
+            with f_handle:
+                yaml.dump(self._agent_config, f_handle, default_flow_style=False)
         # Return
         return self._config_directory
 

@@ -42,7 +42,7 @@ def install(daemon_list, pattoo_home):
     files.mkdir(config_dir)
 
     # Create the pattoo user and group
-    configure.create_user('pattoo', '/nonexistent', ' /bin/false', True)
+    configure.create_user('pattoo', '/nonexistent', '/bin/false', True)
 
     if getpass.getuser() != 'travis':
         # Create the pattoo user and group

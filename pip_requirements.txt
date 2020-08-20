@@ -3,11 +3,7 @@
 #############################################
 
 # Pattoo packages
-<<<<<<< HEAD
 PattooShared==0.0.95
-=======
-PattooShared==0.0.93
->>>>>>> 88887a227173a4ae77239ec876c59339c84bbc0a
 
 # Miscellaneous packages
 Flask

@@ -24,7 +24,6 @@ This script is not installed in the "{}" directory. Please fix.\
 '''.format(_EXPECTED))
     sys.exit(2)
 
-# Importing shared to install pattoo_shared if its not installed
 from _pattoo_agent_linux import shared, checks
 
 # Attempt to import pattoo shared
@@ -108,7 +107,7 @@ class _Install():
         """Intialize the class."""
         # Initialize key variables for normal installation
         install_help = '''\
-Install pattoo. Type install --help to see additional arguments'''
+Install pattoo linux agent. Type install --help to see additional arguments'''
         install_parser = subparsers.add_parser(
             'install',
             help=textwrap.fill(install_help, width=width)
@@ -118,19 +117,6 @@ Install pattoo. Type install --help to see additional arguments'''
         self.subparsers = install_parser.add_subparsers(dest='qualifier')
 
         # Execute all methods in this Class
-        self._execute_methods(width=width)
-
-        # Initialize key variables for developer installation
-        developer_help = '''\
-Set up pattoo for unittesting. Type --help to see additional arguments'''
-        developer_parser = subparsers.add_parser(
-            'developer',
-            help=textwrap.fill(developer_help, width=width)
-            )
-        # Add subparser
-        self.subparsers = developer_parser.add_subparsers(dest='qualifier')
-
-        # Execute class methods
         self._execute_methods(width=width)
 
     def all(self, width=80):
@@ -255,10 +241,6 @@ def get_pattoo_home():
         if pattoo_home == '/nonexistent':
             pattoo_home = '/home/pattoo'
 
-    # Set up pattoo home for unittest user if the user is not root
-    else:
-        pattoo_home = shared.unittest_environment_setup()
-
     return pattoo_home
 
 
@@ -281,14 +263,13 @@ def main():
                     'pattoo_agent_linux_hubd'
                 ]
 
+    # Perform checks
+    checks.installation_checks()
+    checks.pattoo_shared_check()
+    checks.venv_check()
     # Process the CLI
     _parser = Parser(additional_help=_help)
     (args, parser) = _parser.args()
-
-    # Perform checks
-    checks.parser_check(_parser.args()[1], _parser.args()[0])
-    checks.pattoo_shared_check()
-    checks.venv_check()
 
     # Import packages that depend on pattoo shared
     from _pattoo_agent_linux import configure
@@ -296,46 +277,41 @@ def main():
 
     # Set up essentials for creating the virtualenv
     pattoo_home = get_pattoo_home()
-    print(pattoo_home)
     venv_dir = os.path.join(pattoo_home, 'pattoo-venv')
     if getpass.getuser() != 'travis':
         environment.environment_setup(venv_dir)
     venv_interpreter = os.path.join(venv_dir, 'bin/python3')
     installation_dir = '{} {}'.format(venv_interpreter, ROOT_DIR)
-
     # Installs all linux agent components
-    if args.qualifier == 'all':
-        print('Installing everything')
-        configure.install(daemon_list, pattoo_home)
-        packages.install(ROOT_DIR, venv_dir, args.verbose)
-        if shared.root_check() is True and args.action != 'developer':
+    if args.action == 'install':
+        if args.qualifier == 'all':
+            print('Installing everything')
+            configure.install(daemon_list, pattoo_home)
+            packages.install(ROOT_DIR, venv_dir, args.verbose)
             systemd.install(daemon_list=daemon_list,
                             template_dir=template_dir,
                             installation_dir=installation_dir)
 
-    # Sets up configuration for linux agent
-    elif args.qualifier == 'configuration':
-        print('Installing configuration')
-        configure.install(daemon_list, pattoo_home)
+        # Sets up configuration for linux agent
+        elif args.qualifier == 'configuration':
+            print('Installing configuration')
+            configure.install(daemon_list, pattoo_home)
 
-    # Installs necessary pip packages
-    elif args.qualifier == 'pip':
-        print('Installing pip packages')
-        packages.install(ROOT_DIR, venv_dir, args.verbose)
+        # Installs necessary pip packages
+        elif args.qualifier == 'pip':
+            print('Installing pip packages')
+            packages.install(ROOT_DIR, venv_dir, args.verbose)
 
-    # Installs and runs system daemons
-    elif args.qualifier == 'systemd':
-        if shared.root_check() is True:
+        # Installs and runs system daemons
+        elif args.qualifier == 'systemd':
             print('Installing and running system daemons')
             systemd.install(daemon_list=daemon_list,
                             template_dir=template_dir,
                             installation_dir=installation_dir)
-        else:
-            shared.log('You need to be running as root to install the daemons')
 
-    else:
-        parser.print_help(sys.stderr)
-        sys.exit(1)
+        else:
+            parser.print_help(sys.stderr)
+            sys.exit(1)
 
         # Done
         print('Done')

@@ -1,8 +1,8 @@
 """Install pattoo configuration."""
 import os
+from _pattoo_agent_linux import shared as _shared
 from pattoo_shared.installation import configure, shared
 from pattoo_shared import files
-import getpass
 
 
 def install(daemon_list, pattoo_home):
@@ -41,10 +41,7 @@ def install(daemon_list, pattoo_home):
     # Attempt to create configuration directory
     files.mkdir(config_dir)
 
-    # Create the pattoo user and group
-    configure.create_user('pattoo', '/nonexistent', '/bin/false', True)
-
-    if getpass.getuser() != 'travis':
+    if _shared.root_check() is True:
         # Create the pattoo user and group
         configure.create_user('pattoo', pattoo_home, '/bin/false', True)
 

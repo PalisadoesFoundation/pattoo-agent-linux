@@ -1,7 +1,6 @@
 """The checks necessary for a seamless installation."""
 import os
 import getpass
-import sys
 from _pattoo_agent_linux import shared
 
 
@@ -62,38 +61,10 @@ def installation_checks():
     """
     # Check user
     if getpass.getuser() != 'travis':
+        if shared.root_check() is False:
+            shared.log('Please run the script with sudo to continue.')
         # Check installation directory
         if os.getcwd().startswith('/home'):
             shared.log('''\
 You cloned the repository in a home related directory, please clone in a\
  non-home directory to continue''')
-
-
-def parser_check(parser, args):
-    """Verify the conditions needed for the installation.
-
-    Args:
-        parser: The parser object
-        args: The arguments passed into the CLI
-
-    Returns:
-        None
-
-    """
-    # Perform installation check to ensure the environment is okay
-    installation_checks()
-    if args.action == 'install':
-        if shared.root_check() is False and getpass.getuser() != 'travis':
-            shared.log('Please run the script with sudo to continue.')
-            print('Default Installation')
-
-    elif args.action == 'developer':
-        print('Unittesting mode')
-        if shared.root_check() is True:
-            shared.log('''\
-You cannot run the developer installation as root. 
-Please run without sudo privileges to continue''')
-
-    else:
-        parser.print_help(sys.stderr)
-        sys.exit(1)

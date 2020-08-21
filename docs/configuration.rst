@@ -4,25 +4,6 @@ Configuration Guide
 
 After installation, you will need to create a configuration file in a directory dedicated to ``pattoo``.
 
-*********************************************
-Setting the  Configuration Directory Location
-*********************************************
-
-You must first set the location of the configuration directory by using the ``PATTOO_CONFIGDIR`` environmental variable. Here is how to do this from the Linux command line:
-
-.. code-block:: bash
-
-    $ export PATTOO_CONFIGDIR=/path/to/configuration/directory
-
-``pattoo`` applications will read the configuration files located in this directory when ``PATTOO_CONFIGDIR`` is set.
-
-You can automatically set this variable each time you log in by adding these lines to your ``~/.bash_profile`` file.
-
-.. code-block:: bash
-
-    export PATTOO_CONFIGDIR=/path/to/configuration/directory
-
-Make sure that files in this directory are readable by the user that will be running ``pattoo`` agent daemons or scripts.
 
 *********************
 Configuration Options
@@ -38,18 +19,13 @@ Quick Method
 
 Use the quick method if you are new to ``pattoo``.
 
-Run the ``setup/configure.py`` script. It will prompt you for all configuration parameters. The defaults should be sufficient in most cases.
+Run the ``setup/install.py`` script.  The configuration values will be automatically set.
 
 Here's the command to run:
 
 .. code-block:: bash
 
-    setup/configure.py
-
-Next Steps:
-
-#. Run the installation script next as outlined in the :doc:`installation` guide.
-#. You will now need to configure each agent individually. See the :doc:`agent` file for details on how to configure each type of agent.
+  $ sudo setup/install.py install configuration
 
 Expert Method
 =============
@@ -59,26 +35,13 @@ This section goes into configuration parameters in great detail.
 Setting the  Configuration Directory Location
 ---------------------------------------------
 
-You must first set the location of the configuration directory by using the ``PATTOO_CONFIGDIR`` environmental variable. Here is how to do this from the Linux command line:
+By default, the configuration directory for all pattoo components is set to ``/etc/pattoo``, which is owned by the pattoo user
 
-.. code-block:: bash
-
-    $ export PATTOO_CONFIGDIR=/path/to/configuration/directory
-
-``pattoo`` applications will read the configuration files located in this directory when ``PATTOO_CONFIGDIR`` is set.
-
-You can automatically set this variable each time you log in by adding these lines to your ``~/.bash_profile`` file.
-
-.. code-block:: bash
-
-    export PATTOO_CONFIGDIR=/path/to/configuration/directory
-
-Make sure that files in this directory are readable by the user that will be running ``pattoo`` agent daemons or scripts.
 
 Copy the Template to Your Configuration Directory
 -------------------------------------------------
 
-You can create your first ``pattoo.yaml`` configuration file by copying the template file in the ``examples/etc`` directory to the ``PATTOO_CONFIGDIR`` location.
+You can create your first ``pattoo.yaml`` configuration file by copying the template file in the ``examples/etc`` directory to the ``/etc/pattoo`` location.
 
 **NOTE:** If a ``/path/to/configuration/directory/pattoo.yaml`` file already exists in the directory then skip this step and edit the file according to the steps in following sections.
 

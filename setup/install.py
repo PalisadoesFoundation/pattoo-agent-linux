@@ -24,8 +24,7 @@ This script is not installed in the "{}" directory. Please fix.\
 '''.format(_EXPECTED))
     sys.exit(2)
 
-# Importing shared to install pattoo_shared if its not installed
-from _pattoo_agent_linux import shared
+from _pattoo_agent_linux import shared, checks
 
 # Attempt to import pattoo shared
 DEFAULT_PATH = '''\
@@ -106,28 +105,19 @@ class _Install():
 
     def __init__(self, subparsers, width=80):
         """Intialize the class."""
-        # Initialize key variables
-        parser = subparsers.add_parser(
+        # Initialize key variables for normal installation
+        install_help = '''\
+Install pattoo linux agent. Type install --help to see additional arguments'''
+        install_parser = subparsers.add_parser(
             'install',
-            help=textwrap.fill('Install pattoo.', width=width)
+            help=textwrap.fill(install_help, width=width)
         )
+
         # Add subparser
-        self.subparsers = parser.add_subparsers(dest='qualifier')
+        self.subparsers = install_parser.add_subparsers(dest='qualifier')
 
         # Execute all methods in this Class
-        for name in dir(self):
-            # Get all attributes of Class
-            attribute = getattr(self, name)
-
-            # Determine whether attribute is a method
-            if ismethod(attribute):
-
-                # Ignore if method name is reserved (eg. __Init__)
-                if name.startswith('_'):
-                    continue
-
-                # Execute
-                attribute(width=width)
+        self._execute_methods(width=width)
 
     def all(self, width=80):
         """CLI command to install all pattoo components.
@@ -204,64 +194,29 @@ class _Install():
             help=textwrap.fill('Install and run system daemons', width=width)
         )
 
+    def _execute_methods(self, width=80):
+        """Execute class methods.
 
-def venv_check():
-    """Check if "virtualenv" is installed.
-    If virtualenv is not installed it gets automatically installed to the
-    user's default python path
-    Args:
-        None
-    Returns:
-        None
-    """
-    # Check if virtualenv is installed
-    try:
-        import virtualenv
-    except ModuleNotFoundError:
-        print('virtualenv is not installed, installing the latest version')
-        shared.run_script('pip3 install virtualenv')
+        Args:
+            width: Width of the help text string to STDIO before wrapping
 
+        Returns:
+            None
 
-def pattoo_shared_check():
-    """Check if pattoo shared is installed.
-    If pattoo shared is not installed, it gets installed to the user's
-    default python path
-    Args:
-        None
-    Returns:
-        None
-    """
-    # Try except to install pattoo shared
-    try:
-        import pattoo_shared
-    except ModuleNotFoundError:
-        print('PattooShared is missing, installing the latest version')
-        shared.run_script('pip3 install PattooShared')
+        """
+        # Execute all methods in this Class
+        for name in dir(self):
+            # Get all attributes of Class
+            attribute = getattr(self, name)
 
+            # Determine whether attribute is a method
+            if ismethod(attribute):
+                # Ignore if method name is reserved (eg. __Init__)
+                if name.startswith('_'):
+                    continue
 
-def installation_checks():
-    """Validate conditions needed to start installation.
-
-    Prevents installation if the script is not run as root and prevents
-    installation if script is run in a home related directory
-
-    Args:
-        None
-
-    Returns:
-        True: If conditions for installation are satisfied
-
-    """
-    # Check user
-    if getpass.getuser() != 'travis':
-        if getpass.getuser() != 'root':
-            shared.log('You are currently not running the script as root.\
-Run as root to continue')
-        # Check installation directory
-        if os.getcwd().startswith('/home'):
-            shared.log('''\
-You cloned the repository in a home related directory, please clone in a\
- non-home directory to continue''')
+                # Execute
+                attribute(width=width)
 
 
 def get_pattoo_home():
@@ -274,16 +229,17 @@ def get_pattoo_home():
         The home directory for the pattoo user
 
     """
-    try:
-        # No exception will be thrown if the pattoo user exists
-        pattoo_home = pwd.getpwnam('pattoo').pw_dir
-    # Set defaults if pattoo user doesn't exist
-    except KeyError:
-        pattoo_home = '/home/pattoo'
+    if shared.root_check() is True:
+        try:
+            # No exception will be thrown if the pattoo user exists
+            pattoo_home = pwd.getpwnam('pattoo').pw_dir
+        # Set defaults if pattoo user doesn't exist
+        except KeyError:
+            pattoo_home = '/home/pattoo'
 
-    # Ensure that the pattoo home directory is not set to non-existent
-    if pattoo_home == '/nonexistent':
-        pattoo_home = '/home/pattoo'
+        # Ensure that the pattoo home directory is not set to non-existent
+        if pattoo_home == '/nonexistent':
+            pattoo_home = '/home/pattoo'
 
     return pattoo_home
 
@@ -307,33 +263,27 @@ def main():
                     'pattoo_agent_linux_hubd'
                 ]
 
+    # Perform checks
+    checks.installation_checks()
+    checks.pattoo_shared_check()
+    checks.venv_check()
     # Process the CLI
     _parser = Parser(additional_help=_help)
     (args, parser) = _parser.args()
 
-    # Process CLI options
+    # Import packages that depend on pattoo shared
+    from _pattoo_agent_linux import configure
+    from pattoo_shared.installation import packages, systemd, environment
+
+    # Set up essentials for creating the virtualenv
+    pattoo_home = get_pattoo_home()
+    venv_dir = os.path.join(pattoo_home, 'pattoo-venv')
+    if getpass.getuser() != 'travis':
+        environment.environment_setup(venv_dir)
+    venv_interpreter = os.path.join(venv_dir, 'bin/python3')
+    installation_dir = '{} {}'.format(venv_interpreter, ROOT_DIR)
+    # Installs all linux agent components
     if args.action == 'install':
-        pattoo_shared_check()
-        venv_check()
-
-        # Import pattoo_shared related libraries
-        from pattoo_shared.installation import packages, systemd, environment
-        from _pattoo_agent_linux import configure
-
-        # Setup virtual environment
-        if getpass.getuser() != 'travis':
-            pattoo_home = get_pattoo_home()
-            venv_dir = os.path.join(pattoo_home, 'pattoo-venv')
-            environment.environment_setup(venv_dir)
-            venv_interpreter = os.path.join(venv_dir, 'bin/python3')
-            installation_dir = '{} {}'.format(venv_interpreter, ROOT_DIR)
-        else:
-            # Set default directories for travis
-            pattoo_home = os.path.join(os.path.expanduser('~'), 'pattoo')
-            venv_dir = DEFAULT_PATH
-            installation_dir = ROOT_DIR
-
-        # Installs all linux agent components
         if args.qualifier == 'all':
             print('Installing everything')
             configure.install(daemon_list, pattoo_home)
@@ -369,6 +319,4 @@ def main():
 
 if __name__ == '__main__':
     # Ensure appropriate conditions are set for the installation
-    installation_checks() 
-
     main()

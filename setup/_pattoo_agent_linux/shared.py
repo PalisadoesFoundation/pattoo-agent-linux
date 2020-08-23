@@ -1,9 +1,9 @@
 """Shared functions and methods utilized by the pattoo installation."""
 # Standard imports
 import sys
-import os
 import subprocess
 import traceback
+import getpass
 
 
 def run_script(cli_string, die=True, verbose=True):
@@ -94,3 +94,19 @@ def log(message):
     # exit
     print('\nPATTOO Error: {}'.format(message))
     sys.exit(3)
+
+
+def root_check():
+    """Check if the user is root.
+
+    Args:
+        None
+
+    Returns:
+        True: If the user is root
+        False: If the user is not root
+    """
+    if getpass.getuser() == 'root':
+        return True
+    else:
+        return False

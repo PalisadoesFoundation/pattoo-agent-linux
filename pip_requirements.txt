@@ -3,7 +3,7 @@
 #############################################
 
 # Pattoo packages
-PattooShared==0.0.95
+PattooShared==0.0.97
 
 # Miscellaneous packages
 Flask

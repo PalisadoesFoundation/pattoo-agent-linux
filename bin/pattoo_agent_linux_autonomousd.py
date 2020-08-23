@@ -24,14 +24,14 @@ else:
 
 # Pattoo libraries
 from pattoo_shared import log
-from pattoo_shared.agent import Agent, AgentCLI
+from pattoo_shared.agent import EncryptedAgent, AgentCLI
 from pattoo_shared.phttp import PostAgent, EncryptedPostAgent
 from pattoo_agent_linux import PATTOO_AGENT_LINUX_AUTONOMOUSD
 from pattoo_agent_linux import collector
 from pattoo_agent_linux.configuration import ConfigAutonomousd as Config
 
 
-class PollingAgent(Agent):
+class PollingAgent(EncryptedAgent):
     """Agent that gathers data."""
 
     def __init__(self, parent):
@@ -45,21 +45,11 @@ class PollingAgent(Agent):
 
         """
         # Initialize key variables
-        Agent.__init__(self, parent)
+        config = Config()
         self._parent = parent
 
-        # Add email address to Agent subclass
-        econfig = Config()
-        self.set_email(econfig.agent_email_address())
-
-        # Email address must be the same in the first created Pgpier
-        # object for the agent as the one in the yaml file
-        # or else an error might occur. To use a
-        # different email address, delete the contents of the
-        # key folder
-
-        # Set up encryption using Pgpier in Agent
-        self.gpg = self.set_gnupg() # Creation and retrieval of Pgpier object
+        # Setup parent
+        EncryptedAgent.__init__(self, parent, config=config)
 
     def query(self):
         """Query all remote targets for data.
@@ -84,7 +74,7 @@ class PollingAgent(Agent):
             agentdata = collector.poll(self._parent, _pi)
 
             # Post encrypted data to remote server
-            server = EncryptedPostAgent(agentdata, self.gpg)
+            server = EncryptedPostAgent(agentdata, self._gpg)
 
             # Post data
             success = server.post()

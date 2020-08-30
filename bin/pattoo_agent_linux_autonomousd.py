@@ -74,7 +74,7 @@ class PollingAgent(EncryptedAgent):
             agentdata = collector.poll(self._parent, _pi)
 
             # Post encrypted data to remote server
-            server = EncryptedPostAgent(agentdata, self._gpg)
+            server = EncryptedPostAgent(agentdata, self.encryption)
 
             # Post data
             success = server.post()
